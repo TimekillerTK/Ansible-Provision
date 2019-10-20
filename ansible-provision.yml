@@ -1,0 +1,38 @@
+---
+- name: Provisioning new hosts to be Ansible-ized
+  hosts: raw
+  tasks:
+    - name: Install Python3
+      raw: "yum install python3 -y"
+    - name: Create the Ansible user
+      user: 
+        name: ansible
+        state: present
+    - name: Create .ssh directory for ansible user
+      file:
+        path: /home/ansible/.ssh
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: 0700
+    - name: Create authorized_keys for ansible user
+      file: 
+        path: /home/ansible/.ssh/authorized_keys
+        state: touch
+        owner: ansible
+        group: ansible
+        mode: 0600
+    - name: Copy public key for ansible user
+      copy:
+        dest: /home/ansible/.ssh/authorized_keys
+        content: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC+5J1tUwBty40T9YVVbcFEqy+R13Wkc5scU/Ky6oDDFX+pjB035mxch1q8eVwdssoV3BT8IJHUKyBODtIP0QcvfhDTUKEhPO6f0VKAQkDI0c5C7wca9kbBOgYgHQSJkt64iDcAyfWnbjZ2aNCZLaRVzd0/EPU1s+sSz8UiiVMx625/Z6m+B1/xjAdszC+S6nxRDMHmfC7Vjmk92AFICw3Q/DWssJPw2AnGJFmDheNvCVt7ZnAwDxZYQc0O6QhZx65j7QhtYt8M3Gjm1Mo24Zci5sTCuu2HyW2p4oyaPLtrfY8NCpftubPjBngR57M0g1xZvTsZduw/7YAYZdJV3Z8nrrkk1MP2T0wA1P6aLd9qq9WIG2A7yLr9nkgLcd4iuv6+oTAUbogJT0CouMbNy5zO+wUEYT5LmlFCza3EdCIklOU4C9t9ZW7ZeposYxMeA9uMosQHhzd5p2nQ4qkyTqMa6Jhsu6TqmxH11ffjquYh8nlFIkAoLdFm3dm/K+E8xHk= ansible@AMD-Kotetsu"
+    - name: Create sudo file
+      file:
+        path: /etc/sudoers.d/ansible
+        state: touch
+        mode: 0644
+    - name: Paste sudo configuration
+      copy:
+        dest: /etc/sudoers.d/ansible
+        content: "ansible ALL=(ALL) NOPASSWD: ALL"
+...
