@@ -9,3 +9,8 @@ Run this playbook by supplying the username to connect as and supplying the inve
 * Cleanup
 * Add hostname change
 * Include NW config (Gateway & DNS)
+
+
+## Requirements
+`sshpass` application is required.
+* `apt install sshpass`
