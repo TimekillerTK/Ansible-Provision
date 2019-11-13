@@ -1,10 +1,8 @@
 ---
 - name: Provisioning new hosts to be Ansible-ized
   hosts: raw
-  vars:
-    pubkeys:
-      - pathto/pubkey1.pub
-      - pathto/pubkey1.pub
+  vars_files:
+    - vars/pubkeys.yml
   tasks:
     - name: Install Python3
       raw: "yum install python3 -y"
