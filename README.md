@@ -6,12 +6,13 @@ Run this playbook by supplying the username to connect as and supplying the inve
 * `ansible-playbook ansible-provision.yml -u username -i inventoryfile --ask-pass --ask-become-pass`
 
 ## Variables
-Variables are in the `vars/pubkeys.yml` file in the following format:
+Variables are in the `vars/vars.yml` file in the following format:
 ```yml
+user: ansible_user
 pubkeys:
-      - path/to/pubkey1.yml
-      - path/to/pubkey2.yml
-      - path/to/pubkey3.yml
+      - path/to/pubkey1.pub
+      - path/to/pubkey2.pub
+      - path/to/pubkey3.pub
 ```
 
 ## TODO

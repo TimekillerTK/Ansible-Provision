@@ -2,26 +2,26 @@
 - name: Provisioning new hosts to be Ansible-ized
   hosts: raw
   vars_files:
-    - vars/pubkeys.yml
+    - vars/vars.yml
   tasks:
     - name: Install Python3
       raw: "yum install python3 -y"
     - name: Create the Ansible user
       user: 
-        name: ansible
+        name: "{{ vars.user }}"
         state: present
     - name: Add SSH public keys to ansible user
       authorized_key:
-        user: ansible
+        user: "{{ vars.user }}"
         key: "{{ item }}"
-      with_file: "{{ pubkeys }}"
+      with_file: "{{ vars.pubkeys }}"
     - name: Create sudo file
       file:
-        path: /etc/sudoers.d/ansible
+        path: "/etc/sudoers.d/{{ vars.user }}"
         state: touch
         mode: 0644
     - name: Paste sudo configuration
       copy:
-        dest: /etc/sudoers.d/ansible
-        content: "ansible ALL=(ALL) NOPASSWD: ALL"
+        dest: "/etc/sudoers.d/{{ vars.user }}"
+        content: "{{ vars.user }} ALL=(ALL) NOPASSWD: ALL"
 ...
