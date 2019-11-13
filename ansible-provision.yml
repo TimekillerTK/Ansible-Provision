@@ -1,6 +1,10 @@
 ---
 - name: Provisioning new hosts to be Ansible-ized
   hosts: raw
+  vars:
+    pubkeys:
+      - pathto/pubkey1.pub
+      - pathto/pubkey1.pub
   tasks:
     - name: Install Python3
       raw: "yum install python3 -y"
@@ -11,7 +15,8 @@
     - name: Add SSH public keys to ansible user
       authorized_key:
         user: ansible
-        key: "{{ lookup('file', '<pathtopublickey.pub>') }}"
+        key: "{{ item }}"
+      with_file: "{{ pubkeys }}"
     - name: Create sudo file
       file:
         path: /etc/sudoers.d/ansible
