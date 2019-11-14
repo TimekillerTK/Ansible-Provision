@@ -4,24 +4,11 @@
   vars_files:
     - vars/vars.yml
   tasks:
-    - name: Install Python3
-      raw: "yum install python3 -y"
-    - name: Create the Ansible user
-      user: 
-        name: "{{ vars.user }}"
-        state: present
-    - name: Add SSH public keys to ansible user
-      authorized_key:
-        user: "{{ vars.user }}"
-        key: "{{ item }}"
-      with_file: "{{ vars.pubkeys }}"
-    - name: Create sudo file
-      file:
-        path: "/etc/sudoers.d/{{ vars.user }}"
-        state: touch
-        mode: 0644
-    - name: Paste sudo configuration
-      copy:
-        dest: "/etc/sudoers.d/{{ vars.user }}"
-        content: "{{ vars.user }} ALL=(ALL) NOPASSWD: ALL"
+    - name: Prepare CentOS system to be managed by ansible
+      include_tasks: CentOS.yml
+      when: ansible_facts['distribution'] == "CentOS"
+
+#    - name: Prepare Ubuntu system to be managed by ansible
+#      include_tasks: Ubuntu.yml
+#      when: 
 ...

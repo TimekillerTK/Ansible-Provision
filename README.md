@@ -18,6 +18,7 @@ pubkeys:
 ## TODO
 * Cleanup
 * Add hostname change
+* Add support for RHEL, CentOS & Ubunut
 * Include NW config (Gateway & DNS)
 
 ## Requirements
