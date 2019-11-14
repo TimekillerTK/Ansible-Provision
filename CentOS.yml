@@ -1,22 +1,29 @@
 ---
 - name: Install Python3
-  raw: "yum install python3 -y"
+  raw: "test -f /usr/bin/python3 || yum install python3 -y"
 - name: Create the Ansible user
   user: 
     name: "{{ vars.user }}"
     state: present
-- name: Add SSH public keys to ansible user
+- name: Add SSH public keys to {{ vars.user }} user
   authorized_key:
     user: "{{ vars.user }}"
     key: "{{ item }}"
   with_file: "{{ vars.pubkeys }}"
-- name: Create sudo file
-  file:
-    path: "/etc/sudoers.d/{{ vars.user }}"
-    state: touch
+- name: Sudo configuration for {{ vars.user }}
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/{{ vars.user }}
+    validate: 'visudo -cf %s'
     mode: 0644
-- name: Paste sudo configuration
-  copy:
-    dest: "/etc/sudoers.d/{{ vars.user }}"
-    content: "{{ vars.user }} ALL=(ALL) NOPASSWD: ALL"
+
+#- name: Create sudo file
+#  file:
+#    path: "/etc/sudoers.d/{{ vars.user }}"
+#    state: touch
+#    mode: 0644
+#- name: Paste sudo configuration
+#  copy:
+#    dest: "/etc/sudoers.d/{{ vars.user }}"
+#    content: "{{ vars.user }} ALL=(ALL) NOPASSWD: ALL"
 ...

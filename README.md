@@ -18,7 +18,8 @@ pubkeys:
 ## TODO
 * Cleanup
 * Add hostname change
-* Add support for RHEL, CentOS & Ubunut
+* Add support for various package managers (Currently supporting `yum`)
+* Add `ansible_managed` in Jinja2 template
 * Include NW config (Gateway & DNS)
 
 ## Requirements
