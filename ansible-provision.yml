@@ -6,8 +6,8 @@
   tasks:
     - name: Prepare CentOS system to be managed by ansible
       include_tasks: CentOS.yml
-      when: ansible_facts['distribution'] == "CentOS"
-
+#      when: ansible_facts['distribution'] == "CentOS"
+      when: ansible_distribution == "CentOS"
 #    - name: Prepare Ubuntu system to be managed by ansible
 #      include_tasks: Ubuntu.yml
 #      when: 

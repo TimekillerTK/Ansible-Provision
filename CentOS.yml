@@ -1,7 +1,7 @@
 ---
 - name: Install Python3
   raw: "test -f /usr/bin/python3 || yum install python3 -y"
-- name: Create the Ansible user
+- name: Create the {{ vars.user }} user
   user: 
     name: "{{ vars.user }}"
     state: present
@@ -15,15 +15,5 @@
     src: sudoers.j2
     dest: /etc/sudoers.d/{{ vars.user }}
     validate: 'visudo -cf %s'
-    mode: 0644
-
-#- name: Create sudo file
-#  file:
-#    path: "/etc/sudoers.d/{{ vars.user }}"
-#    state: touch
-#    mode: 0644
-#- name: Paste sudo configuration
-#  copy:
-#    dest: "/etc/sudoers.d/{{ vars.user }}"
-#    content: "{{ vars.user }} ALL=(ALL) NOPASSWD: ALL"
+    mode: 0440
 ...

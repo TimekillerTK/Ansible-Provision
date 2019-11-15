@@ -6,7 +6,7 @@ Run this playbook by supplying the username to connect as and supplying the inve
 * `ansible-playbook ansible-provision.yml -u username -i inventoryfile --ask-pass --ask-become-pass`
 
 ## Variables
-Variables are in the `vars/vars.yml` file in the following format:
+Variables should be specified in the `vars/vars.yml` file in the following format:
 ```yml
 user: ansible_user
 pubkeys:
@@ -17,10 +17,11 @@ pubkeys:
 
 ## TODO
 * Cleanup
-* Add hostname change
-* Add support for various package managers (Currently supporting `yum`)
-* Add `ansible_managed` in Jinja2 template
-* Include NW config (Gateway & DNS)
+* Add support for various package managers (currently only supporting `yum`)
+* Put few distro specific tasks into block statement and apply conditional to that block statement
+* Disable Root Login
+* Disallow password login
+
 
 ## Requirements
 `sshpass` application is required.
