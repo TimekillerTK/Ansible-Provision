@@ -1,0 +1,11 @@
+---
+# defaults file for provision
+#
+# This will generate errors for non-existing public keys, if you do not specify them in:
+# provision/vars/main.yml
+
+user: ansible_user
+pubkeys:
+      - path/to/pubkey1.pub
+      - path/to/pubkey2.pub
+      - path/to/pubkey3.pub

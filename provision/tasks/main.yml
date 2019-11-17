@@ -1,0 +1,43 @@
+---
+# tasks file for provision
+
+# This will group hosts by specific key (group_vars) using OS Distribution & Major Version ansible facts
+# This will FAIL if there is no python interpreter installed by default!
+- name: Group by OS
+  group_by:
+    key: os_{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version']}}
+
+# Installs Python3, if it doesn't exist. raw_text variable depends on Distro.
+- name: Install Python3
+  raw: "{{ raw_text }}"
+
+# Creates the managed host's ansible user, whatever is specified in vars/main.yml
+- name: Create the {{ vars.user }} user
+  user: 
+    name: "{{ vars.user }}"
+    state: present
+
+# Adds SSH public keys for the ansible user created in the previous step
+- name: Add SSH public keys to {{ vars.user }} user
+  authorized_key:
+    user: "{{ vars.user }}"
+    key: "{{ item }}"
+  with_file: "{{ vars.pubkeys }}"
+
+# Creates sudo configuration for the ansible user
+- name: Sudo configuration for {{ vars.user }}
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/{{ vars.user }}
+    validate: 'visudo -cf %s'
+    mode: 0440
+
+# Modifies sshd config, mostly to disable password auth & disable root login
+# Notifies handler in handlers/main.yml to restart sshd after sshd config modificaiton
+- name: SSHD configuration, disable root login / password auth
+  template:
+    src: "{{ sshd_j2 }}"
+    dest: /etc/ssh/sshd_config
+    validate: 'sshd -t -f %s'
+    mode: 0640
+  notify: restart sshd

@@ -1,0 +1,3 @@
+---
+raw_text: "test -f /usr/bin/python3 || yum install python3 -y"
+sshd_j2: centos_sshd_config.j2

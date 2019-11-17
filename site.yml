@@ -1,0 +1,8 @@
+---
+# Main playbook to run
+# Tasks are, of course, in provision/tasks/main.yml
+- name: Prepare new managed hosts for Ansible
+  hosts: all
+  roles:
+    - provision
+...
