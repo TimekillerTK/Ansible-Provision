@@ -1,19 +1,6 @@
 ---
-- name: Install Python3
-  raw: "test -f /usr/bin/python3 || yum install python3 -y"
-- name: Create the {{ vars.user }} user
-  user: 
-    name: "{{ vars.user }}"
-    state: present
-- name: Add SSH public keys to {{ vars.user }} user
-  authorized_key:
-    user: "{{ vars.user }}"
-    key: "{{ item }}"
-  with_file: "{{ vars.pubkeys }}"
-- name: Sudo configuration for {{ vars.user }}
-  template:
-    src: sudoers.j2
-    dest: /etc/sudoers.d/{{ vars.user }}
-    validate: 'visudo -cf %s'
-    mode: 0440
+# Current implementation is flawed, moving everything to single 
+# ansible_provision.yml file
+
+
 ...

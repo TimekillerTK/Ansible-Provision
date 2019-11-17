@@ -15,14 +15,17 @@ pubkeys:
       - path/to/pubkey3.pub
 ```
 
-## TODO
-* Cleanup
-* Add support for various package managers (currently only supporting `yum`)
-* Put few distro specific tasks into block statement and apply conditional to that block statement
-* Disable Root Login
-* Disallow password login
-
-
 ## Requirements
 `sshpass` application is required.
-* `apt install sshpass`
+* Ubuntu: `apt install sshpass`
+* CentOS: `yum install sshpass`
+* Arch: `pacman -S sshpass` 
+
+
+## TODO
+* Cleanup
+* Add support for various package managers / distros (currently only supporting `yum` / `CentOS`)
+* Put few distro specific tasks into block statement and apply conditional to that block statement
+* ~~Disable Root Login~~ **Added via new j2 template - task completed**
+* ~~Disallow password login~~ **Added via new j2 template - task completed**
+

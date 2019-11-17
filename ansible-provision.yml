@@ -4,11 +4,38 @@
   vars_files:
     - vars/vars.yml
   tasks:
-    - name: Prepare CentOS system to be managed by ansible
-      include_tasks: CentOS.yml
+    - name: Install Python3
+      raw: "test -f /usr/bin/python3 || yum install python3 -y"
+    - name: Create the {{ vars.user }} user
+      user: 
+        name: "{{ vars.user }}"
+        state: present
+    - name: Add SSH public keys to {{ vars.user }} user
+      authorized_key:
+        user: "{{ vars.user }}"
+        key: "{{ item }}"
+      with_file: "{{ vars.pubkeys }}"
+    - name: Sudo configuration for {{ vars.user }}
+      template:
+        src: sudoers.j2
+        dest: /etc/sudoers.d/{{ vars.user }}
+        validate: 'visudo -cf %s'
+        mode: 0440
+    - name: SSHD configuration, disable root login / password auth
+      template:
+        src: sshd_config.j2
+        dest: /etc/ssh/sshd_config
+        validate: 'sshd -t -f %s'
+        mode: 0640
+      notify: restart sshd
 #      when: ansible_facts['distribution'] == "CentOS"
-      when: ansible_distribution == "CentOS"
+#      when: ansible_distribution == "CentOS"
 #    - name: Prepare Ubuntu system to be managed by ansible
 #      include_tasks: Ubuntu.yml
 #      when: 
+  handlers:
+    - name: restart sshd
+      service: 
+        name: sshd
+        state: restarted
 ...
