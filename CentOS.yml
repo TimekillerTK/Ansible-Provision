@@ -1,6 +1,0 @@
----
-# Current implementation is flawed, moving everything to single 
-# ansible_provision.yml file
-
-
-...
