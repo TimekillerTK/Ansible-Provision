@@ -23,8 +23,11 @@ pubkeys:
 
 
 ## TODO
-* Cleanup
-* Add support for various package managers / distros (currently only supporting `yum` / `CentOS`)
+* Cleanup mess (it's all one file)
+* Apply best practices: https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
+* ~~Add support for various package managers / distros (currently only supporting `yum` / `CentOS`)~~
+  * **Support for Ubuntu added (Tested with 16.04, 18.04, 19.04)**
+  * **Support for CentOS6 added (epel repository needs to be added for Python3)**
 * Put few distro specific tasks into block statement and apply conditional to that block statement
 * ~~Disable Root Login~~ **Added via new j2 template - task completed**
 * ~~Disallow password login~~ **Added via new j2 template - task completed**

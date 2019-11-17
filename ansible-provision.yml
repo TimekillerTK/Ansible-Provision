@@ -1,6 +1,53 @@
 ---
 - name: Provisioning new hosts to be Ansible-ized
-  hosts: raw
+  hosts: all
+  tasks:
+    - name: 
+      group_by:
+        key: os_{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version']}}
+
+- name: Play for CentOS6 hosts
+  hosts: 'os_CentOS6'
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    - name: Install Python3
+      raw: "test -f /usr/bin/python3 || yum install epel-release -y && yum install python34 -y"
+    - name: Create the {{ vars.user }} user
+      user: 
+        name: "{{ vars.user }}"
+        state: present
+
+    - name: Add SSH public keys to {{ vars.user }} user
+      authorized_key:
+        user: "{{ vars.user }}"
+        key: "{{ item }}"
+      with_file: "{{ vars.pubkeys }}"
+
+    - name: Sudo configuration for {{ vars.user }}
+      template:
+        src: sudoers.j2
+        dest: /etc/sudoers.d/{{ vars.user }}
+        validate: 'visudo -cf %s'
+        mode: 0440
+
+    - name: SSHD configuration, disable root login / password auth
+      template:
+        src: centos_sshd_config.j2
+        dest: /etc/ssh/sshd_config
+        validate: 'sshd -t -f %s'
+        mode: 0640
+      notify: restart sshd
+
+  handlers:
+    - name: restart sshd
+      service: 
+        name: sshd
+        state: restarted
+
+        
+- name: Play for CentOS hosts (not CentOS6)
+  hosts: 'os_CentOS*,!os_CentOS6'
   vars_files:
     - vars/vars.yml
   tasks:
@@ -10,29 +57,67 @@
       user: 
         name: "{{ vars.user }}"
         state: present
+
     - name: Add SSH public keys to {{ vars.user }} user
       authorized_key:
         user: "{{ vars.user }}"
         key: "{{ item }}"
       with_file: "{{ vars.pubkeys }}"
+
     - name: Sudo configuration for {{ vars.user }}
       template:
         src: sudoers.j2
         dest: /etc/sudoers.d/{{ vars.user }}
         validate: 'visudo -cf %s'
         mode: 0440
+
     - name: SSHD configuration, disable root login / password auth
       template:
-        src: sshd_config.j2
+        src: centos_sshd_config.j2
         dest: /etc/ssh/sshd_config
         validate: 'sshd -t -f %s'
         mode: 0640
       notify: restart sshd
-#      when: ansible_facts['distribution'] == "CentOS"
-#      when: ansible_distribution == "CentOS"
-#    - name: Prepare Ubuntu system to be managed by ansible
-#      include_tasks: Ubuntu.yml
-#      when: 
+
+  handlers:
+    - name: restart sshd
+      service: 
+        name: sshd
+        state: restarted
+
+- name: Play for Ubuntu hosts
+  hosts: 'os_Ubuntu*'
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    - name: Install Python3
+      raw: "test -f /usr/bin/python3 || apt install python3 -y"
+    - name: Create the {{ vars.user }} user
+      user: 
+        name: "{{ vars.user }}"
+        state: present
+
+    - name: Add SSH public keys to {{ vars.user }} user
+      authorized_key:
+        user: "{{ vars.user }}"
+        key: "{{ item }}"
+      with_file: "{{ vars.pubkeys }}"
+
+    - name: Sudo configuration for {{ vars.user }}
+      template:
+        src: sudoers.j2
+        dest: /etc/sudoers.d/{{ vars.user }}
+        validate: 'visudo -cf %s'
+        mode: 0440
+
+    - name: SSHD configuration, disable root login / password auth
+      template:
+        src: ubuntu_sshd_config.j2
+        dest: /etc/ssh/sshd_config
+        validate: 'sshd -t -f %s'
+        mode: 0640
+      notify: restart sshd
+
   handlers:
     - name: restart sshd
       service: 
