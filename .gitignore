@@ -1,4 +1,3 @@
-vars/*
-!vars/.gitkeep
+provision/vars/*
+!provision/vars/.gitkeep
 inventory
-
