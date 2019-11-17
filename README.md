@@ -44,7 +44,7 @@ hostname1.example.com
 hostname2.example.com
 hostname3.example.com
 ```
-8. You're set, run the following command, supplying the username:
+8. You're set, run the following command, supplying the username and entering the password when prompted:
    * `ansible-playbook site.yml -u yourusernamehere -i inventory --ask-pass --ask-become-pass`
    * **NOTE**: The username must be either `root` or a user with `sudo` privileges!
 
