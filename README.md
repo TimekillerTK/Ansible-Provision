@@ -1,13 +1,14 @@
 # Ansible-Provision
 For provisioning new Ansible Hosts. Created mostly for myself in order to set up LinuxAcademy cloud servers with public keys from multiple computers for easy accessibility.
 
-End result is one or more Ansible Managed hosts, ready for you to run ansible commands against & SSH into using a SSH keypair.
+End result is one or more Ansible Managed hosts, ready for you to run ansible commands against & SSH into using a previously generated SSH keypair.
 
 ---
 ## How to run
-**TLDR**; Run this playbook by supplying the username to connect as and supplying the inventory to use. For example: 
-* `ansible-playbook site.yml -u username -i inventory --ask-pass --ask-become-pass`
-
+**TLDR**; Run this playbook by supplying the username to connect as and (optionally) supplying the inventory to use. Put any public keys you want in the `pubkeys` folder. For example:
+```
+ansible-playbook site.yml -u username -i inventory --ask-pass --ask-become-pass
+```
 Here are step-by step instructions for absolute ansible beginners (assuming you're running this on Ubuntu Linux):
 1. Install `git`:
    * `sudo apt update && sudo apt install git -y`
@@ -18,6 +19,7 @@ Here are step-by step instructions for absolute ansible beginners (assuming you'
 3. Create a ssh keypair:
    * `ssh-keygen` (accept all defaults)
      * The path to the generated public key will be in `~/.ssh/id_rsa.pub`
+     * Copy this file to the `pubkey` directory.
 4. Clone the repository. This will create a directory called `Ansible-Provision` in your current directory.
    * `git clone https://github.com/TimekillerTK/Ansible-Provision.git`
 5. Go into the `Ansible-Provision` directory
@@ -45,19 +47,16 @@ hostname2.example.com
 hostname3.example.com
 ```
 8. You're set, run the following command, supplying the username and entering the password when prompted:
-   * `ansible-playbook site.yml -u yourusernamehere -i inventory --ask-pass --ask-become-pass`
+   * `ansible-playbook site.yml -u yourusernamehere --ask-pass --ask-become-pass`
    * **NOTE**: The username must be either `root` or a user with `sudo` privileges!
 
 
 ---
 ## Variables
-Variables should be specified in the `provision/vars/main.yml` file in the following format, you can see an example in `provision/defaults/main.yml`:
+Variables can be specified in the `provision/vars/main.yml` file in the following format, you can see an example in `provision/defaults/main.yml`:
 ```yml
 user: ansible_user
-pubkeys:
-      - path/to/pubkey1.pub
-      - path/to/pubkey2.pub
-      - path/to/pubkey3.pub
+pubkeys: "pubkeys/*.pub"
 ```
 ---
 ## Requirements
@@ -76,3 +75,7 @@ pubkeys:
   * Works on CentOS8 without issues
 * ~~Disable Root Login~~ **Added via new j2 template - task completed**
 * ~~Disallow password login~~ **Added via new j2 template - task completed**
+* ~~Default pubkeys won't exist and will need to be overriden. Find a way so the role does not need to be modified~~
+  * **Added feature where you can dump public keys into new `pubkeys` folder, they will be picked up automatically and added to all hosts within a group**
+* ~~Inventory doesn't need to be specified in the readme, already in ansible.cfg~~
+* Find different method of separating Distribution / Package Managers, current one is very suboptimal

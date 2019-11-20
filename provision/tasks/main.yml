@@ -21,8 +21,10 @@
 - name: Add SSH public keys to {{ vars.user }} user
   authorized_key:
     user: "{{ vars.user }}"
-    key: "{{ item }}"
-  with_file: "{{ vars.pubkeys }}"
+    key: "{{ lookup('file', item) }}"
+  with_fileglob:
+    - "{{ vars.pubkeys }}"
+
 
 # Creates sudo configuration for the ansible user
 - name: Sudo configuration for {{ vars.user }}

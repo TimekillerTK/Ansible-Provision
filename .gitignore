@@ -1,3 +1,5 @@
 provision/vars/*
 !provision/vars/.gitkeep
+pubkeys/*
+!pubkeys/.gitkeep
 inventory

@@ -5,7 +5,4 @@
 # provision/vars/main.yml
 
 user: ansible_user
-pubkeys:
-      - path/to/pubkey1.pub
-      - path/to/pubkey2.pub
-      - path/to/pubkey3.pub
+pubkeys: "pubkeys/*.pub"
