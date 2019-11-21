@@ -1,0 +1,5 @@
+---
+raw_text: |
+  test -f /usr/bin/yum && yum install python3 -y
+  test -f /usr/bin/yum && yum install epel-release -y && yum install python34 -y
+  test -f /usr/bin/apt && apt install python3 -y

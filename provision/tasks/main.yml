@@ -1,15 +1,20 @@
 ---
 # tasks file for provision
 
+# Installs Python3, if it doesn't exist. raw_text variable depends on Distro.
+- name: Install Python3
+  raw: "{{ raw_text }}"
+  ignore_errors: yes
+
+# Runs Setup module to gather new facter:
+- name: Gather facts about hosts after Python3 install
+  setup:
+
 # This will group hosts by specific key (group_vars) using OS Distribution & Major Version ansible facts
 # This will FAIL if there is no python interpreter installed by default!
 - name: Group by OS
   group_by:
-    key: os_{{ ansible_facts['distribution'] }}{{ ansible_facts['distribution_major_version']}}
-
-# Installs Python3, if it doesn't exist. raw_text variable depends on Distro.
-- name: Install Python3
-  raw: "{{ raw_text }}"
+    key: os_{{ ansible_facts['distribution'] }}
 
 # Creates the managed host's ansible user, whatever is specified in vars/main.yml
 - name: Create the {{ vars.user }} user
