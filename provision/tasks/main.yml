@@ -1,17 +1,18 @@
 ---
 # tasks file for provision
 
-# Installs Python3, if it doesn't exist. raw_text variable depends on Distro.
+# Installs Python3, if it doesn't exist. raw_text variable is defined in group_vars/all.yml
+# and tests for various package managers
 - name: Install Python3
   raw: "{{ raw_text }}"
   ignore_errors: yes
 
-# Runs Setup module to gather new facter:
+# Runs Setup module to gather new facts, since Python3 is now installed
 - name: Gather facts about hosts after Python3 install
   setup:
 
-# This will group hosts by specific key (group_vars) using OS Distribution & Major Version ansible facts
-# This will FAIL if there is no python interpreter installed by default!
+# This will group hosts by specific key (group_vars) using OS Distribution ansible facts
+# This will FAIL if there is no python interpreter installed (solved in previous step)
 - name: Group by OS
   group_by:
     key: os_{{ ansible_facts['distribution'] }}
