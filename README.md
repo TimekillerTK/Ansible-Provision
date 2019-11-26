@@ -73,9 +73,15 @@ pubkeys: "pubkeys/*.pub"
   * **Support for Ubuntu added (Tested with 16.04, 18.04, 19.04)**
   * **Support for CentOS6 added (epel repository needs to be added for Python3)**
   * Works on CentOS8 without issues
+  * **Support for RHEL added**
 * ~~Disable Root Login~~ **Added via new j2 template - task completed**
 * ~~Disallow password login~~ **Added via new j2 template - task completed**
 * ~~Default pubkeys won't exist and will need to be overriden. Find a way so the role does not need to be modified~~
   * **Added feature where you can dump public keys into new `pubkeys` folder, they will be picked up automatically and added to all hosts within a group**
 * ~~Inventory doesn't need to be specified in the readme, already in ansible.cfg~~
 * Find different method of separating Distribution / Package Managers, current one is very suboptimal
+* Get rid of `stderr` when running raw commands at the beginning
+* Change python Interpreter to python3 after starting playbook
+  * _Not sure if good idea..._
+* ~~Add script file that you can run quickly~~
+  * Done, configured for LinuxAcademy `cloud_user` by default

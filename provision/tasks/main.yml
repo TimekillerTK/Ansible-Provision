@@ -6,6 +6,7 @@
 - name: Install Python3
   raw: "{{ raw_text }}"
   ignore_errors: yes
+  no_log: true
 
 # Runs Setup module to gather new facts, since Python3 is now installed
 - name: Gather facts about hosts after Python3 install
