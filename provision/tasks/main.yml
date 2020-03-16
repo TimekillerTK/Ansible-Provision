@@ -41,6 +41,21 @@
     validate: 'visudo -cf %s'
     mode: 0440
 
+# Makes sure firewalld is installed
+- name: firewalld installation check
+  yum:
+    name: firewalld
+    state: present
+  notify: start firewalld
+
+# add additional SSH port
+- name: firewalld configuration for new SSH port
+  firewalld:
+    port: "{{ vars.ssh_port }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+
 # Modifies sshd config, mostly to disable password auth & disable root login
 # Notifies handler in handlers/main.yml to restart sshd after sshd config modificaiton
 - name: SSHD configuration, disable root login / password auth

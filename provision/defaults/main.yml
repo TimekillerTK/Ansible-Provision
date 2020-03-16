@@ -6,3 +6,4 @@
 
 user: ansible_user
 pubkeys: "pubkeys/*.pub"
+ssh_port: 22/tcp
